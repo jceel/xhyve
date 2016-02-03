@@ -395,7 +395,7 @@ fs_create(void *softc, struct l9p_request *req)
 		    mode);
 	}
 
-	if (lchown(newname, file->uid, file->gid) != 0) {
+	if (lchown(newname, file->uid, (gid_t)-1) != 0) {
 		l9p_respond(req, errno);
 		return;
 	}
