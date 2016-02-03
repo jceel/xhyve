@@ -536,9 +536,17 @@ fs_remove(void *softc, struct l9p_request *req)
 		return;
 	}
 
-	if (unlink(file->name) != 0) {
-		l9p_respond(req, errno);
-		return;
+	if (S_ISDIR(st.st_mode)) {
+		if (rmdir(file->name) != 0) {
+			l9p_respond(req, errno);
+			return;
+		}
+
+	} else {
+		if (unlink(file->name) != 0) {
+			l9p_respond(req, errno);
+			return;
+		}
 	}
 
 	l9p_respond(req, 0);
